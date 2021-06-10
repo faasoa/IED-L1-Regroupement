@@ -1,0 +1,87 @@
+SEPTEMBRE 2016
+; Vous pouvez définir des fonctions auxiliaires si vous en avez besoin.
+
+EX 1.1
+; Soient deux listes plates:
+; - la première une liste de produits
+; - la seconde une liste de prix
+
+; Liste_produits : (produit produit ... produit)
+; Liste_prix : (prix prix ... prix)
+
+; Créer une fonction "associer" qui construit récursivement une liste
+; dont chaque élément est un doublet ;
+; le premier élément de ce doublet est le produit et le deuxième le prix.
+; Il faut définir la fonction associer :
+
+; (associer Liste_produits Liste_prix)
+; => ((produit . prix) (produit . prix) ... (produit . prix))
+
+; On laisse tomber les produits qui n'ont pas de prix
+; et les prix qui n'ont pas de produits.
+
+(setq Liste_produits '(a b c d e))
+(setq Liste_prix '(1 2 3 4 5))
+
+(defun associer (Liste_produits Liste_prix)
+   (cond 
+      ((or (atom Liste_produits) (atom Liste_prix)) nil)
+      (t 
+         (cons  
+            (cons (car Liste_produits) (car Liste_prix))
+            (associer (cdr Liste_produits) (cdr Liste_prix))) ) ) )
+
+; (associer Liste_produits Liste_prix)
+
+EX 1.2
+; Créer une fonction chirurgicale récursive qui fait la même chose
+; mais en modifiant directement Liste_produits :
+
+; (modifier Liste_produits Liste_prix)
+; => ((produit . prix) (produit . prix) ... (produit . prix))
+
+; Liste_produits : ((produit . prix) (produit . prix) ... (produit . prix))
+
+; Astuce : utiliser rplaca.
+
+(setq  Liste_produits '(a b c d e))
+(setq Liste_prix '(1 2 3 4 5))
+
+(defun modifier (Liste_produits Liste_prix)
+   ; (print Liste_produits)
+   (cond
+      ((or (atom Liste_produits) (atom Liste_prix)) nil)
+      (t 
+         (rplaca 
+            Liste_produits  
+            (cons (car Liste_produits) (car Liste_prix)))
+         (modifier (cdr Liste_produits) (cdr Liste_prix))) ) )
+
+; (modifier Liste_produits Liste_prix)
+; Liste_produits
+
+EX 2
+; On part d'un arbre contenant des produits groupés par catégories et 
+; dont les feuilles contiennent des prix ; par exemple :
+
+; Arbre_produits :
+; ((fruit (pomme (golden 3.40) (boskop 2.5)) (raisin (blanc (muscat 4)... ) (noir (chasselas 5.5)))) (légume (carotte 2)...) )
+
+; Créer une liste des produits dont le prix
+; est inférieur à une certaine valeur :
+
+; (inférieur 4 Arbre_produits)
+; => ((golden 3.40) (boskop 2.5) (carotte 2) ...)
+
+(setq arbre '((fruit (pomme (golden 3.40) (boskop 2.5)) (raisin (blanc (muscat 4) ) (noir (chasselas 5.5)))) (légume (carotte 2)) ) )
+
+(defun F (num L)
+   (cond
+      ((atom L) nil)
+      ((listp (car L))
+         (append (F num (car  L)) (F num (cdr  L))) )
+      ((and (numberp (cadr L)) (< (cadr L) num))
+         (cons (cons (car L) (cons (cadr L) nil)) (F num (cdr  L))))
+      ((F num (cdr  L))) ) )
+
+; (F 4 arbre)

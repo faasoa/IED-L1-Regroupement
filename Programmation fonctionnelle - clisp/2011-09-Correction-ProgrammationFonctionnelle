@@ -1,0 +1,66 @@
+SEPTEMBRE 2011
+
+EX 1
+; soit une liste de la forme :
+; ((cours note) (cours note) ... (cours note))
+
+; où cours est un atome alphanumérique quelconque,
+; et note est un nombre
+
+; coder une fonction (récursive) qui calcule la moyenne des notes
+; supérieures à 10 dans une telle liste
+
+(setq liste '((maths 12) (anglais 8) (si 19) (espagnol 9)))
+
+(defun moyenne (liste)
+   (defun totalnotes (liste)
+      (defun nombrenotes (liste)
+         (cond
+            ((atom liste) 0)
+            ((> (cadar liste) 10) (+ 1 (nombrenotes (cdr liste))))
+            (t (nombrenotes (cdr liste))) ) )
+      (cond
+         ((atom liste) 0)
+         ((> (cadar liste) 10) (+ (cadar liste) (totalnotes (cdr liste))))
+         (t (totalnotes (cdr liste))) ) )
+   (cond
+      ((atom liste) 0)
+      (t (/ (totalnotes liste) (nombrenotes liste))) ) )
+
+; (moyenne liste)
+
+EX 2
+; soit une liste de forme quelconque, par exemple :
+; (a b (c (d e) f) g)
+
+; coder une fonction qui supprime effectivement, dans une telle liste,
+; les atomes qui n"auraient pas de valeur…
+
+; il s'agit donc bien de construire une fonction chirurgicale récursive
+; on utilisera la fonction boundp() qui retourne nil si l'atome passé
+; en argument n'a pas de valeur ;
+
+; exemple :
+; (boundp quelconque) ; cet atome n'a jamais été défini
+; nil
+
+VERSION BANCALE, ne marche pas pour les premiers éléments
+qui ne répondent pas aux critères
+
+(setq liste '(e math b (angl)))
+
+(setq math 5)
+(setq angl 4)
+
+(defun valeur (liste)
+   (print (car liste))
+   (cond
+      ((atom liste) nil)
+      ((listp (car liste)) 
+         (valeur (car liste)) (rplacd liste (valeur (cdr liste))) )
+      ((boundp (car liste))
+         (rplacd liste (valeur (cdr liste))) )
+      (t 
+         (valeur (cdr liste)) ) ) )
+
+; (valeur liste)

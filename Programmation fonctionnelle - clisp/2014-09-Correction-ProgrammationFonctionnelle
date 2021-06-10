@@ -1,0 +1,87 @@
+SEPTEMBRE 2014
+
+EX 1.1
+; coder une fonction aussi qui prend deux arguments arg1 et arg2,
+; des listes plates, et qui retourne la liste des éléments qui
+; figurent à la fois dans arg1 et dans arg2 ; par exemple :
+; (aussi '(p a s t a) '(s p a g h e t t i)) ⇢ (p a s t)
+
+(setq liste1 '(p a s t a))
+(setq liste2 '(s p a g h e t t i))
+
+(defun aussi (arg1 arg2 &optional arg3)
+   (cond
+      ((atom arg1) nil)
+      ((and (member (car arg1) arg2) (not (member (car arg1) arg3))) 
+         (cons (car arg1) (aussi (cdr arg1) arg2 (cons  (car arg1) arg3))))
+      (t (aussi (cdr arg1) arg2) ) ) )
+
+; (aussi 'liste1 'liste2)
+
+EX 1.2
+; coder une fonction unik qui prend deux arguments arg1 et arg2,
+; des listes plates, et qui retourne la liste des éléments de arg1 qui
+; ne figurent pas aussi dans arg2 ; par exemple :
+; (unik '(n o u i l l e) '(r a v i o l i)) ⇢ (n u e)
+
+(setq liste1 '(n o u i l l e))
+(setq liste2 '(r a v i o l i))
+
+(defun unik (arg1 arg2)
+   (cond
+      ((atom arg1) nil)
+      ((member (car arg1) arg2) (unik (cdr arg1) arg2))
+      (t (cons (car arg1) (unik (cdr arg1) arg2))) ) )
+
+; (unik liste1 liste2)
+
+EX 2.1
+; soit une liste L quelconque, dont on sait que certains éléments
+; sont des atomes numériques,
+; par exemple : (setq L '(a z 7 q 4 w 1 x 3))
+; coder une fonction augmente qui opère directement son argument
+; pour en augmenter tous les nombres de 10 ; par exemple,
+; après avoir évalué (augmente L), la valeur de L serait
+; modifiée en (a z 17 q 14 w 11 x 13)
+
+(setq L '(a z 7 q 4 w 1 x 3))
+
+(defun augmente (liste)
+   (cond
+      ((atom liste) nil)
+      ((numberp (car liste))
+         (rplaca liste (+ (car liste) 10))
+         (augmente (cdr liste)) )
+      (t (augmente (cdr liste))) ) )
+
+; (augmente L)
+; L
+
+EX 2.2
+; coder la fonction augmente+, pareille, à ceci près quʼon veut aussi
+; pouvoir traiter des arbres, cʼest-à-dire que les atomes numériques
+; peuvent tout à fait se trouver dans les profondeurs de sous-listes,
+; comme dans le cas de :
+;      (setq A '(a z (e 5 (r t 8) (6 q s d 7)) f 9))
+; qui devra être chirurgicalement transformé en
+;      (a z (e 15 (r t 18) (16 q s d 17)) f 19) ;
+
+(setq A '(a z (e 5 (r t 8) (6 q s d 7)) f 9))
+
+(defun augmente+ (liste)
+   (cond
+      ((atom liste) nil)
+      ((listp (car liste)) 
+         (augmente+ (car liste))
+         (augmente+ (cdr liste)) )
+      ((numberp (car liste))
+         (rplaca liste (+ (car liste) 10) )
+         (augmente+ (cdr liste)) )
+      (t (augmente+ (cdr liste))) ) )
+
+; (augmente+ A)
+; A
+
+; Remarque : peu importe ce que retournent les fonctions
+; augmente et augmente+, puisquʼon les utilise exclusivement
+; pour leur effet, et non pour leur valeur !

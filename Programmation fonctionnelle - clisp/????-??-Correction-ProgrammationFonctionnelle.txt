@@ -1,0 +1,160 @@
+ANNEE INCONNUE
+
+EX 1.1
+; à partir d'une liste contenant des doublets et des sous-listes
+; de doublets du genre :
+
+; '(  (1 . 27)
+;     (3 . 9)
+;     (  (2 . 33)
+;        (5 . 27)
+;        (4 . 52)
+;        (7 . 8) )
+;      (6 . 74) )
+
+; faire une fonction pour récupérer dans une liste le premier de
+; chaque doublet dont le deuxième élément est supérieur à 10
+
+(setq L '((1 . 27) (3 . 9) ((2 . 33) (5 . 27) (4 . 52) (7 . 8)) (6 . 74)))
+
+(defun prem (L)
+   (cond
+      ((atom L) nil)
+      ((listp (caar L))  
+         (append 
+            (prem (car L)) 
+            (prem (cdr L))) )
+      ((> (cdar L) 10)
+         (cons (caar L) (prem (cdr L))) )
+      (t 
+         (prem (cdr L)) ) ) )
+
+; (prem L)
+
+EX 1.2
+; modifier la liste pour qu'elle ne contienne plus que les
+; doublets dont le deuxième élément est supérieur à 10
+
+CODE N IMPORTE QUOI MAIS CA TOURNE !!!
+
+(setq L '((1 . 27) (3 . 9) ((2 . 33) (5 . 27) (4 . 52) (7 . 8)) (6 . 74)))
+
+(defun prem (L)
+   (cond
+      ((atom L) nil)
+      ((listp (caar L))  
+         (append 
+            (prem (car L)) 
+            (prem (cdr L))) )
+      ((> (cdar L) 10)
+         (rplacd L (prem (cdr L))) )
+      (t 
+         (prem (cdr L)) ) ) )
+
+; (prem L)
+; L
+
+EX 2.1
+; à partir d'une liste dont les éléments sont du type
+; nom de l'étudiant + notes, comme :
+
+;  '( (toto 10 10 10)
+;     (titi 10 20 15)
+;     (tata 18 16 14) )
+
+; faire une fonction qui génère une liste de doublets dont le
+; premier élément est le nom de l'étudiant et le second la moyenne
+; de ses notes
+
+; version généralisée (sous-fonction définie dans une fonction)
+
+(setq liste '((toto 10 10 10) (titi 10 12 14 16) (tata 20 18 16 14 12)))
+
+(defun moyenne (liste)
+   (defun somme (liste)
+      (cond
+         ((atom liste) 0)
+         ((numberp (car liste)) (+ (car liste) (somme (cdr liste))))
+         ((somme (cdr liste))) ) )
+   (cond
+      ((atom liste) nil)
+      (t (cons
+            (cons
+               (caar liste)
+               (cons
+                  (/
+                     (somme (car liste))
+                     (1- (length (car liste))) )
+                  nil ) )
+            (moyenne (cdr liste)) ) ) ) )
+
+; (moyenne liste)
+
+; version non généralisée (pas de sous-fonction)
+
+(setq liste '((toto 10 10 10) (titi 10 20 15) (tata 18 16 14)))
+
+(defun moyenne (liste)
+   (cond
+      ((atom liste) nil)
+      (t (cons
+            (cons
+               (caar liste)
+               (cons
+                  (/
+                     (+
+                        (cadar liste)
+                        (+ (caddar liste) (car (cdddar liste))) )
+                     (1- (length (car liste))) )
+                  nil ) )
+            (moyenne (cdr liste)) ) ) ) )
+
+; (moyenne liste)
+
+EX 2.2
+; idem, par modification de la liste originale
+
+; version généralisée (sous-fonction définie dans une fonction)
+
+(setq liste '((toto 10 10 10) (titi 10 12 14 16) (tata 20 18 16 14 12)))
+
+(defun moyenne (liste)
+   (defun somme (liste)
+      (cond
+         ((atom liste) 0)
+         ((numberp (car liste)) (+ (car liste) (somme (cdr liste))))
+         ((somme (cdr liste))) ) )
+   (cond
+      ((atom liste) nil)
+      (t (rplacd
+            (car liste)
+            (cons
+               (/
+                  (somme (car liste))
+                  (1- (length (car liste))) )
+               nil ) )
+         (moyenne (cdr liste)) ) ) )
+
+; (moyenne liste)
+; liste
+
+; version non généralisée (pas de sous-fonction)
+
+(setq liste '((toto 10 10 10) (titi 10 20 15) (tata 18 16 14)))
+
+(defun moyenne (liste)
+   (cond
+      ((atom liste) nil)
+      (t (rplacd
+            (car liste)
+            (cons
+               (/
+                  (+
+                     (cadar liste)
+                     (+ (caddar liste) (car (cdddar liste))) )
+                  (1- (length (car liste))) )
+               nil ) )
+         (moyenne (cdr liste))) ) )
+
+; (moyenne liste)
+; liste

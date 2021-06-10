@@ -1,0 +1,77 @@
+JUIN 2016
+; Vous pouvez définir des sous-fonctions si vous en avez besoin.
+
+EX 1.1
+; à partir d'une liste associant les ressources produites par un pays
+; donné et les quantités produites, d'une liste des cours des ressources
+; en euros (les ressources du pays sont inclues dans celles des cours,
+; mais l'inverse n'est pas vrai)
+
+; Pays : ((ressource1 quantité1) (ressource2...) ... (ressourceN...))
+; Cours : ((ressource1 cours1)... (ressourceM coursM))
+
+; faire une fonction récursive qui réunit ces informations pour une
+; ressource donnée :
+; (cours ressource Pays Cours) = (ressource quantité cours)
+
+(setq Pays '((res1 10) (res2 20) (res3 30)))
+(setq Cours '((res1 1000) (res2 2000) (res3 3000)))
+(setq ressource 'res2)
+
+(defun cours (ressource Pays Cours)
+   (cond
+      ((atom Pays) nil)
+      ((equal
+            ressource
+            (caar Pays) )
+         (cons
+            (caar Pays)
+            (cons
+               (cadar Pays)
+               (cons
+                  (cadar Cours)
+                  nil ) ) ) )
+      (t (cours ressource (cdr Pays) (cdr Cours))) ) )
+
+; (cours ressource Pays Cours)
+
+EX 1.2
+; faire une fonction récursive qui fait la même chose pour toutes les
+; ressources disponibles dans le pays :
+
+; (cours-ressources Pays Liste)
+; = ((ressource1 quantité1 cours1)... (ressourceN quantitéN))
+
+(setq Pays '((res1 10) (res2 20) (res3 30)))
+(setq Cours '((res1 1000) (res2 2000) (res3 3000)))
+
+(defun cours-ressources (Pays Cours)
+   (cond
+      ((atom Pays) nil)
+      (t (cons
+            (cons
+               (caar Pays)
+               (cons (cadar Pays) (cons (cadar Cours) nil)) )
+            (cours-ressources (cdr Pays) (cdr Cours)) ) ) ) )
+
+; (cours-ressources Pays Cours)
+
+EX 2
+; à l'aide d'une fonction chirurgicale récursive, modifiez la liste
+; obtenue en 1.2 pour remplacer les quantités et les cours de chaque
+; ressource par sa valeur (déterminée par le produit du cours par la
+; quantité)
+; (richesses liste) => ((ressource1 valeur1)... (ressourceN valeurN))
+
+; (setq liste '((res1 10 1000) (res2 20 2000) (res3 30 3000)))
+
+(defun richesses (liste)
+   (cond
+      ((atom liste) nil)
+      (t (rplacd
+            (car liste)
+            (cons (* (cadar liste) (caddar liste)) nil) )
+         (richesses (cdr liste)) ) ) )
+
+; (richesses liste)
+; liste

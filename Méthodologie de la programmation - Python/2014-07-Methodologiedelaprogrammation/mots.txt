@@ -1,0 +1,7 @@
+bleu	blue
+cyan	cyan
+jaune	yellow
+mauve	purple
+rose	pink
+rouge	red
+vert	green

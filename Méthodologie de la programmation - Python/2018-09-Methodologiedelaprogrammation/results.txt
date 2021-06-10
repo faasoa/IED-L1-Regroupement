@@ -1,0 +1,48 @@
+[A] Russie, Arabie Saoudite, 5 - 0
+[A] Egypte, Uruguay, 0 - 1
+[B] Maroc, Iran, 0 - 1
+[B] Portugal, Espagne, 3 - 3
+[C] France, Australie, 2 - 1
+[D] Argentine, Islande, 1 - 1
+[C] Pérou, Danemark, 0 - 1
+[D] Croatie, Nigeria, 2 - 0
+[E] Costa Rica, Serbie, 0 - 1
+[F] Allemagne, Mexique, 0 - 1
+[E] Brésil, Suisse, 1 - 1
+[F] Suède, Corée, 1 - 0
+[G] Belgique, Panama, 3 - 0
+[G] Tunisie, Angleterre, 1 - 2
+[H] Colombie, Japon, 1 - 2
+[H] Pologne, Sénégal, 1 - 2
+[A] Russie, Egypte, 3 - 1
+[B] Portugal, Maroc, 1 - 0
+[A] Arabie Saoudite, Uruguay, 0 - 1
+[B] Espagne, Iran, 1 - 0
+[C] Australie, Danemark, 1 - 1
+[C] France, Pérou, 1 - 0
+[D] Argentine, Croatie, 0 - 3
+[E] Brésil, Costa Rica, 2 - 0
+[D] Islande, Nigeria, 0 - 2
+[E] Suisse, Serbie, 2 - 1
+[G] Belgique, Tunisie, 5 - 2
+[F] Mexique, Corée, 2 - 1
+[F] Allemagne, Suède, 2 - 1
+[G] Panama, Angleterre, 1 - 6
+[H] Sénégal, Japon, 2 - 2
+[H] Pologne, Colombie, 0 - 3
+[A] Arabie Saoudite, Egypte, 2 - 1
+[A] Russie, Uruguay, 0 - 3
+[B] Portugal, Iran, 1 - 1
+[B] Espagne, Maroc, 2 - 2
+[C] Australie, Pérou, 0 - 2
+[C] France, Danemark, 0 - 0
+[D] Argentine, Nigeria, 2 - 1
+[D] Islande, Croatie, 1 - 2
+[F] Mexique, Suède, 0 - 3
+[F] Allemagne, Corée, 0 - 2
+[E] Suisse, Costa Rica, 2 - 2
+[E] Brésil, Serbie, 2 - 0
+[H] Sénégal, Colombie, 0 - 1
+[H] Pologne, Japon, 1 - 0
+[G] Belgique, Angleterre, 1 - 0
+[G] Panama, Tunisie, 1 - 2
