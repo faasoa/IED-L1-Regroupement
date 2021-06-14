@@ -44,23 +44,16 @@ EX 2
 ; (boundp quelconque) ; cet atome n'a jamais été défini
 ; nil
 
-VERSION BANCALE, ne marche pas pour les premiers éléments
-qui ne répondent pas aux critères
-
-(setq liste '(e math b (angl)))
-
-(setq math 5)
-(setq angl 4)
 
 (defun valeur (liste)
-   (print (car liste))
    (cond
       ((atom liste) nil)
       ((listp (car liste)) 
-         (valeur (car liste)) (rplacd liste (valeur (cdr liste))) )
+         (rplaca liste (valeur (car liste)))
+             (rplacd liste (valeur (cdr liste))) )
       ((boundp (car liste))
          (rplacd liste (valeur (cdr liste))) )
       (t 
-         (valeur (cdr liste)) ) ) )
+         (valeur (cdr liste)) ) ) ) )
 
 ; (valeur liste)
