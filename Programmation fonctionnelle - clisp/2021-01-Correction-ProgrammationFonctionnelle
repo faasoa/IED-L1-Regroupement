@@ -1,0 +1,48 @@
+1. Soit une liste de doublets contenant des villes et un nombre de vaccins nécessaire pour chaque ville, construire récursivement une liste ne contenant que le nombre de vaccins et en faire le total.
+((ville . vaccins) (ville . vaccins) ... (ville . vaccins))
+=> (vaccins vaccins vaccins vaccins)
+=> total
+
+Une liste comme l'énoncé :
+(setq vilvac (list (cons 'ville1 1) (cons 'ville2 2) (cons 'ville3 3)))
+
+Construire la liste du nombre de vaccin pour chaque ville par récursion :
+(defun nb_vaccin (liste)
+  (cond
+    ((atom liste) nil)
+    ((cons (cdar liste) (nb_vaccin (cdr liste)))) ) )
+
+Faire le total des vaccins :
+(defun total(L)
+  (cond ((atom L) 0)
+  (t (+ (car L) (total (cdr L)))) ) )
+
+Au final :
+(total (nb_vaccin vilvac))
+> 6
+
+
+2. A partir d'un arbre (liste quelconque mais contenant exclusivement des atomes, pas de nombres ni de chaînes), supprimer les atomes ayant moins de 3 caractères, à l'aide d'une fonction chirurgicale récursive.
+Astuce 1 : Pour convertir en chaîne, utilisez la fonction string, et pour calculer la longueur, la fonction length.
+Astuce 2 : Commencez par écrire une fonction non chirurgicale (qui construit sans modifier).
+Vous avez le droit de faire des fonctions auxiliaires si ça vous facilite la tâche.
+
+Un arbre comme l'énoncé :
+(setq arbre (list (list "a" "az" "aze" "azer") (list (list "a" "az" "aze" "azer") (list "a" "az" "aze" "azer"))))
+
+Fonction non chirurgicale :
+(defun troiscara (L)
+  (cond ((atom L) nil)
+    ((listp (car L))
+      (cons (troiscara (car L)) (troiscara (cdr L))) )
+    ((< 2 (length (string (car L)))) (cons (car L) (troiscara (cdr L))))
+    (t (troiscara (cdr L))) ) )
+
+Fonction chirugicale :
+(defun chiru (L)
+  (cond ((atom L) nil)
+  ((listp (car L))
+    (rplaca L (chiru (car L)))
+    (rplacd L (chiru (cdr L))) )
+  ((< 2 (length (string (car L)))) (rplacd L (chiru (cdr L))))
+  (t (chiru (cdr L))) ) )
