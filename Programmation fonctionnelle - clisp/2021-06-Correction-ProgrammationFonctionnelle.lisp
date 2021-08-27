@@ -27,7 +27,7 @@
 (defun prix (produit L)
   (cond
     ((atom L) nil)
-    ((equal produit (caar L)) (return-from prix (cdar L)))
+    ((equal produit (caar L)) (cdar L))
     (t (prix produit (cdr L))) ) )
 
 ; Une liste pour tester la fonction ci-dessus
