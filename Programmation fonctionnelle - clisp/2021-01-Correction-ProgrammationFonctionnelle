@@ -14,8 +14,9 @@ Construire la liste du nombre de vaccin pour chaque ville par récursion :
 
 Faire le total des vaccins :
 (defun total(L)
-  (cond ((atom L) 0)
-  (t (+ (car L) (total (cdr L)))) ) )
+  (cond 
+    ((atom L) 0)
+    (t (+ (car L) (total (cdr L)))) ) )
 
 Au final :
 (total (nb_vaccin vilvac))
@@ -32,7 +33,8 @@ Un arbre comme l'énoncé :
 
 Fonction non chirurgicale :
 (defun troiscara (L)
-  (cond ((atom L) nil)
+  (cond 
+    ((atom L) nil)
     ((listp (car L))
       (cons (troiscara (car L)) (troiscara (cdr L))) )
     ((< 2 (length (string (car L)))) (cons (car L) (troiscara (cdr L))))
@@ -40,9 +42,10 @@ Fonction non chirurgicale :
 
 Fonction chirugicale :
 (defun chiru (L)
-  (cond ((atom L) nil)
-  ((listp (car L))
-    (rplaca L (chiru (car L)))
-    (rplacd L (chiru (cdr L))) )
-  ((< 2 (length (string (car L)))) (rplacd L (chiru (cdr L))))
-  (t (chiru (cdr L))) ) )
+  (cond 
+    ((atom L) nil)
+    ((listp (car L))
+      (rplaca L (chiru (car L)))
+      (rplacd L (chiru (cdr L))) )
+    ((< 2 (length (string (car L)))) (rplacd L (chiru (cdr L))))
+    (t (chiru (cdr L))) ) )
