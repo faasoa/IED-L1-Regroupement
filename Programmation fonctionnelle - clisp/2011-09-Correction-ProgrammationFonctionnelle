@@ -50,7 +50,7 @@ EX 2
       ((atom liste) nil)
       ((listp (car liste)) 
          (rplaca liste (valeur (car liste)))
-             (rplacd liste (valeur (cdr liste))) )
+         (rplacd liste (valeur (cdr liste))) )
       ((boundp (car liste))
          (rplacd liste (valeur (cdr liste))) )
       (t 
