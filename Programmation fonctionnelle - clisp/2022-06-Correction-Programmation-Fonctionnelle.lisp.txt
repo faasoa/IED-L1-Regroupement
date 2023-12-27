@@ -1,0 +1,106 @@
+JUIN 2022
+
+Epreuve 1.1
+
+; Soient deux listes plates, la première étant une liste de noms et la seconde une liste de cours, 
+; construire récursivement une liste comme suit :
+
+; liste_noms : (nom1 nom2... nomN) 
+; liste_cours : (cours1 cours2... coursN)
+; => ((nom1 (cours1) (cours2) ... (coursN)) ... (nom2 (cours1) (cours2)... (coursN)))
+
+(setq liste_noms '(Britney Katy Miley))
+(setq liste_cours '(Anglais Allemand Mathématique Physique))
+
+(defun liste_de_liste (list)
+    (cond
+        ((atom list) nil)
+        (t (cons (cons (car list) nil) (liste_de_liste (cdr list)))) ) )
+
+(defun associer (noms cours)
+   (cond 
+      ((atom noms) nil)
+      (t 
+         (cons  
+            (cons (car noms) (liste_de_liste cours))
+            (associer (cdr noms) cours)) ) ) )
+
+(associer liste_noms liste_cours)
+; => ((Britney (Anglais) (Allemand) (Mathématique) (Physique)) (Katy (Anglais) (Allemand) (Mathématique) (Physique)) 
+; (Miley (Anglais) (Allemand) (Mathématique) (Physique)))
+
+Epreuve 1.2
+
+; Etant donné une troisième liste :
+
+; ((note1 note2... noteN) (note1 note2... noteN)...)
+
+; contenant les notes obtenues par les étudiants, chaque sous-liste étant associée à un étudiant par sa position 
+; (la première sous-liste pour le premier étudiant, la deuxième pour le deuxième, etc.), et dans chaque sous-liste, 
+; chaque note est associée à un cours par sa position (la première note pour le premier cours, la deuxième pour le deuxième, etc.).
+; Construire à partir de la liste produite en (1) et de cette dernière liste :
+
+; => ((nom1 (cours1 . note1) (cours2 . note2) (cours3 . note3)) (nom1 (cours1 . note1) (cours2 . note2) (cours3 . Note3)) ... )
+
+(setq liste_notes '((4 4 5 6) (6 2 5 3) (6 6 5 6)))
+
+(defun associer_cours_notes (cours notes)
+    (cond
+        ((or (atom cours) (atom notes)) nil)
+        (t 
+            (cons 
+                (cons (car (car cours)) (car notes))
+                (associer_cours_notes (cdr cours) (cdr notes)) ) ) ) )
+
+; (associer_cours_notes '((Anglais) (Allemand) (Mathématique) (Physique)) '(4 4 5 6))
+; => ((Anglais . 4) (Allemand . 4) (Mathématique . 5) (Physique . 6))
+
+(defun associer_notes (noms_cours notes)
+    (cond
+        ((or (atom noms_cours) (atom notes)) nil)
+        (t 
+            (cons 
+                (cons (car (car noms_cours)) (associer_cours_notes (cdr (car noms_cours)) (car notes)))
+                (associer_notes (cdr noms_cours) (cdr notes)) ) ) ) )
+
+; (setq liste_cours_notes (associer liste_noms liste_cours))
+; (associer_notes liste_cours_notes liste_notes)
+; => ((Britney (Anglais . 4) (Allemand . 4) (Mathématique . 5) (Physique . 6)) (Katy (Anglais . 6) (Allemand . 2) (Mathématique . 5) (Physique . 3))
+; (Miley (Anglais . 6) (Allemand . 6) (Mathématique . 5) (Physique . 6)))
+
+Epreuve 2
+
+; A partir d'un arbre (liste quelconque), remplacez par zéro tous les atomes qui ne sont pas des nombres, à l'aide d'une fonction chirurgicale récursive.
+; Astuce 1 : Pour savoir si un élément est un nombre, utilisez la fonction numberp (qui ramène nil si son argument n'est pas un nombre).
+; Astuce 2 : Commencez par écrire une fonction non chirurgicale (qui construit sans modifier).
+
+; Fonction récursive qui contruit un arbre avec les atomes qui ne sont pas des
+; nombres remplacés par 0
+; Modèle:  Construire - Arbre + Filtre (4 cas)
+
+(defun construire (arbre)
+  (cond
+    ((atom arbre) nil)
+    ((listp (car arbre))
+      (cons (construire (car arbre)) (construire (cdr arbre))) )
+    ((numberp (car arbre)) (cons (car arbre) (construire (cdr arbre))))
+    (t (cons 0 (construire (cdr arbre)))) ) )
+
+; (construire '(a (1 2) (b 3)))
+; => (0 (1 2) (0 3))
+
+; Modèle Modifier - Arbre + Filtre (4 cas)
+
+(defun construire (arbre)
+  (cond
+    ((atom arbre) nil)
+    ((listp (car arbre))
+        (rplaca arbre (construire (car arbre)))
+        (rplacd arbre (construire (cdr arbre))) )
+    ((numberp (car arbre)) (rplacd arbre (construire (cdr arbre))))
+    (t 
+        (rplaca arbre 0)
+        (rplacd arbre (construire (cdr arbre))) ) ) )
+
+; (construire '(a b (1 2) (b 3)))
+; => (0 0 (1 2) (0 3))

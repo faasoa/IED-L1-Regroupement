@@ -1,0 +1,126 @@
+SEPTEMBRE 2022
+
+Epreuve 1.1
+
+; Soit une liste constituée de noms de personne (on suppose qu'il n'y a qu'un seul 
+; prénom et que le nom est représenté par un unique atome, même s'il a plusieurs parties),
+; de la forme :
+
+; liste_personnes : ((prénom . nom) (prénom . nom) ...)
+
+; Regroupez dans une liste tous les noms différents (si deux personnes ont le même nom,
+; le nom doit n'apparaître qu'une fois) :
+
+; => (nom nom ...)
+
+(defun contient_nom (liste a)
+  (cond
+    ((atom liste) nil)
+    ((eq (cdar liste) a) t)
+    (t (contient_nom (cdr liste) a)) ) )
+
+(defun contient_prenom (liste a)
+  (cond
+    ((atom liste) nil)
+    ((eq (caar liste) a) t)
+    (t (contient_prenom (cdr liste) a)) ) )
+
+(setq liste_noms '((Britney . Spears) (Miley . Cyrus) (Katy . Perry) (Angela . Perry) (Katy . August)))
+
+; (contient_nom liste_noms 'Bernard) => nil
+; (contient_nom liste_noms 'Spears) => t
+; (contient_nom liste_noms 'Perry) => t
+
+(defun unique_nom (liste)
+  (cond
+    ((atom liste) nil)
+    ((contient_nom (cdr liste) (cdar liste)) (unique_nom (cdr liste)))
+    (t (cons (cdar liste) (unique_nom (cdr liste)))) ) )
+
+(defun unique_prenom (liste)
+  (cond
+    ((atom liste) nil)
+    ((contient_prenom (cdr liste) (caar liste)) (unique_prenom (cdr liste)))
+    (t (cons (caar liste) (unique_prenom (cdr liste)))) ) )
+
+(unique_nom liste_noms) => (Spears Cyrus Perry August)
+(unique_prenom liste_noms) => (Britney Miley Angela Katy)
+
+Epreuve 1.2
+
+; Pour chaque nom, comptez le nombre de personnes ayant ce nom et générez la liste : 
+
+; ((nom . nombre) (nom . nombre)...)
+
+(defun compte (liste nom)
+  (cond
+    ((atom liste) 0)
+    ((eq (cdar liste) nom) (1+ (compte (cdr liste) nom)))
+    (t (compte (cdr liste) nom)) ) )
+
+(compte liste_noms 'Perry) => 2
+(compte liste_noms 'Spears) => 1
+(compte liste_noms 'Bernard) => 0
+
+(defun compte_noms_aux (liste noms)
+  (cond
+    ((atom noms) nil)
+    (t 
+        (cons 
+            (cons (car noms) (compte liste (car noms))) 
+            (compte_noms_aux liste (cdr noms)) ) ) ) )
+
+(compte_noms_aux liste_noms '(Perry Spears Bernard))
+
+(defun compte_noms (liste)
+    (compte_noms_aux liste (unique_nom liste)) )
+
+(compte_noms liste_noms)
+
+
+Epreuve 2
+
+; A partir d'un arbre (liste quelconque) ne contenant que des noms (pas de nombres), 
+; remplacez chaque sous-liste terminale (ne contenant pas de sous-liste) par le nombre 
+; d'éléments de cette sous-liste, à l'aide d'une fonction chirurgicale récursive. 
+; Nil sera considéré comme un atome, pas comme une liste.
+
+; Exemple : (a (b (c (d e f) r (e)) x (g h f)) i j (k l m n)) 
+; => (a (b (c 3 r 1) x 3) i j 4)
+
+; Astuce 1 : Pour savoir la longueur d'une liste, utilisez la fonction length.
+; Astuce 2 : Commencez par écrire une fonction testant si une liste a des sous-listes.
+
+(defun est-terminale (liste)
+  (cond
+    ((atom liste) t)
+    ((listp (car liste)) nil)
+    (t (est-terminale (cdr liste))) ) )
+
+(est-terminale '(a b c d)) => t
+(est-terminale '(a (b) c d)) => nil
+
+(defun construire (arbre)
+  (cond
+    ((atom arbre) nil)
+    ((and (listp (car arbre)) (est-terminale (car arbre))) (cons (length (car arbre)) (construire (cdr arbre))))
+    ((listp (car arbre))
+      (cons (construire (car arbre)) (construire (cdr arbre))) )
+    (t (cons (car arbre) (construire (cdr arbre)))) ) )
+
+(construire '(a (b (c (d e f) r (e)) x (g h f)) i j (k l m n)))
+=> (a (b (c 3 r 1) x 3) i j 4)
+
+(defun construire (arbre)
+  (cond
+    ((atom arbre) nil)
+    ((and (listp (car arbre)) (est-terminale (car arbre))) 
+        (rplaca arbre (length (car arbre)))
+        (rplacd arbre (construire (cdr arbre))) )
+    ((listp (car arbre))
+        (rplaca arbre (construire (car arbre)))
+        (rplacd arbre (construire (cdr arbre))) )
+    (t (rplacd arbre (construire (cdr arbre)))) ) )
+
+(construire '(a (b (c (d e f) r (e)) x (g h f)) i j (k l m n)))
+=> (a (b (c 3 r 1) x 3) i j 4)
